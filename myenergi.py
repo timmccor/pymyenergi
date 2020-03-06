@@ -12,7 +12,7 @@ from requests.auth import HTTPDigestAuth
 
 
 logger = logging.getLogger(__name__)
-api_root = "https://s7.myenergi.net"
+api_root = "https://s2.myenergi.net"
 
 
 logging.basicConfig(level=logging.DEBUG)

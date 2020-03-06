@@ -1,0 +1,8 @@
+{
+  "domain": "myenergi",
+  "name": "MyEnergi",
+  "documentation": "https://www.example.com",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": []
+}

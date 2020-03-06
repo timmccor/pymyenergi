@@ -4,7 +4,7 @@ import logging
 from homeassistant.const import CONF_USERNAME
 from homeassistant.components.binary_sensor import BinarySensorDevice, DEVICE_CLASS_PRESENCE
 
-from .platform import DOMAIN
+from . import DOMAIN
 from .myenergi import ZappiStatus
 
 _LOGGER = logging.getLogger(__name__)
