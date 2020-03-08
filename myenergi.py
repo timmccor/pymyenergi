@@ -223,42 +223,46 @@ class Zappi:
         return self.hub.request('boost-time', {'id': self.serial})
 
     def _update_from_json(self, data):
-        self.generators = []
-        for n in (1, 2, 3, 4, 5):
-            if data['ectt{}'.format(n)] == 'None':
-                continue
-            try:
-                g = {
-                    'type': DeviceType(data['ectt{}'.format(n)]),
-                    'power': data['ectp{}'.format(n)]
-                }
-            except (ValueError) as e:
-                # unsupported device type
-                #logger.warning('Unsupported device type {}'.format(data['ectt{}'.format(n)]))
-                continue
-        self.frequency = data["frq"]
-        self.phase = data["pha"]
-        self.serial = data["sno"]
-        self.status = self._get_status(data["sta"], data["pst"])
-        self.voltage = data["vol"]
-        self.power = data.get("div", 0)
-        self.priority = data["pri"]
-        if data["cmt"] <= 10:
-            self.command_status = CommandStatus.IN_PROGRESS
-        elif data["cmt"] == 253:
-            self.command_status = CommandStatus.FAILED
-        else:
-            self.command_status = CommandStatus.FINISHED
-        self.mode = ZappiMode(data["zmo"])
-        self.remaining_manual_boost = data.get("tbk", 0)
-        self.remaining_smart_boost = data.get("sbk", 0)
-        self.current_charge = data.get("che", 0)
-        self.minimum_green_level = data.get("mgl", 0)
-        self.smart_boost_target_time_minutes = (60 * data.get("sbh", 0)) + data.get("sbm", 0)
-        dt = datetime.datetime.strptime(
-            "{}T{}".format(data["dat"], data["tim"]), "%d-%m-%YT%H:%M:%S"
-        )
-        self.last_updated = dt.replace(tzinfo=pytz.UTC)
+        try:
+            self.generators = []
+            for n in (1, 2, 3, 4, 5):
+                if data['ectt{}'.format(n)] == 'None':
+                    continue
+                try:
+                    g = {
+                        'type': DeviceType(data['ectt{}'.format(n)]),
+                        'power': data['ectp{}'.format(n)]
+                    }
+                except (ValueError) as e:
+                    # unsupported device type
+                    #logger.warning('Unsupported device type {}'.format(data['ectt{}'.format(n)]))
+                    continue
+            self.frequency = data["frq"]
+            self.phase = data["pha"]
+            self.serial = data["sno"]
+            self.status = self._get_status(data["sta"], data["pst"])
+            self.voltage = data["vol"]
+            self.power = data.get("div", 0)
+            self.priority = data["pri"]
+            if data["cmt"] <= 10:
+                self.command_status = CommandStatus.IN_PROGRESS
+            elif data["cmt"] == 253:
+                self.command_status = CommandStatus.FAILED
+            else:
+                self.command_status = CommandStatus.FINISHED
+            self.mode = ZappiMode(data["zmo"])
+            self.remaining_manual_boost = data.get("tbk", 0)
+            self.remaining_smart_boost = data.get("sbk", 0)
+            self.current_charge = data.get("che", 0)
+            self.minimum_green_level = data.get("mgl", 0)
+            self.smart_boost_target_time_minutes = (60 * data.get("sbh", 0)) + data.get("sbm", 0)
+            dt = datetime.datetime.strptime(
+                "{}T{}".format(data["dat"], data["tim"]), "%d-%m-%YT%H:%M:%S"
+            )
+            self.last_updated = dt.replace(tzinfo=pytz.UTC)
+        except:
+            e = sys.exc_info()[0]
+            logger.warning('Unexpected error: {}'.format(e))
 
     @classmethod
     def from_json(cls, data, hub=None):
