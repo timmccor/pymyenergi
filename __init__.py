@@ -53,7 +53,7 @@ CONFIG_SCHEMA = vol.Schema({
 class MyEnergiManager:
 
     SCAN_INTERVAL = timedelta(seconds=60)
-    back_off = 0
+    back_off = 1
     back_off_factor = 1.25
 
     def __init__(self, hass, username, password):
