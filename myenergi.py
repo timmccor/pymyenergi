@@ -260,6 +260,7 @@ class Zappi:
                 "{}T{}".format(data["dat"], data["tim"]), "%d-%m-%YT%H:%M:%S"
             )
             self.last_updated = dt.replace(tzinfo=pytz.UTC)
+            self.grid = data["grd"]
         except:
             e = sys.exc_info()[0]
             logger.warning('Unexpected error: {}'.format(e))

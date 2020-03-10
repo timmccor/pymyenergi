@@ -85,7 +85,7 @@ class MyEnergiManager:
 
         self.back_off = 0
         from .binary_sensor import ZappiPresenceSensor
-        from .sensor import ZappiStatusSensor, ZappiPowerSensor
+        from .sensor import ZappiStatusSensor, ZappiPowerSensor, ZappiGridSensor
 
         for zappi in zappis:
             if zappi.serial in self._zappis_seen:
@@ -99,6 +99,7 @@ class MyEnergiManager:
             new_sensors = [
                 ZappiStatusSensor(zappi),
                 ZappiPowerSensor(zappi),
+                ZappiGridSensor(zappi),
             ]
             self._zappis_seen[zappi.serial] = new_sensors + new_binary_sensors
 

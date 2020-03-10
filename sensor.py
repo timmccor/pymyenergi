@@ -178,3 +178,67 @@ class ZappiPowerSensor(Entity):
         """Get latest cached states from the device."""
         self._state = self._zappi.power
         self._attributes = {}
+
+class ZappiGridSensor(Entity):
+    """The entity class for a Zappi grid connection."""
+
+    def __init__(self, zappi):
+        """Initialize the Zappi grid Sensor."""
+        self._zappi = zappi
+        self._name = 'Home Grid Usage'
+        self._icon = 'mdi:transmission-tower'
+        self._unit = POWER_WATT
+        self._device_class = DEVICE_CLASS_POWER
+        self._id = 'Zappi z{} grid usage'.format(zappi.serial)
+        self.update()
+
+    @property
+    def should_poll(self):
+        """Deactivate polling. Data updated by hub."""
+        return False
+
+    @property
+    def unique_id(self):
+        """Return the unique ID of the binary sensor."""
+        return self._id
+
+    @property
+    def name(self):
+        """Return the name of the device."""
+        return self._name
+
+    @property
+    def device_class(self):
+        """Return the class of this sensor."""
+        return self._device_class
+
+    @property
+    def icon(self):
+        """Icon to use in the frontend, if any."""
+        return self._icon
+
+    @property
+    def state(self):
+        """Return the state of the sensor."""
+        return self._state
+
+    @property
+    def unit_of_measurement(self):
+        """Get the unit of measurement."""
+        return self._unit
+
+    @property
+    def device_info(self):
+        return {
+            'identifiers': (DOMAIN, 'z' + str(self._zappi.serial))
+        }
+
+    @property
+    def device_state_attributes(self):
+        """Return the state attributes of the binary sensor."""
+        return self._attributes
+
+    def update(self):
+        """Get latest cached states from the device."""
+        self._state = self._zappi.grid
+        self._attributes = {}
