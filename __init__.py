@@ -53,8 +53,6 @@ CONFIG_SCHEMA = vol.Schema({
 class MyEnergiManager:
 
     SCAN_INTERVAL = timedelta(seconds=60)
-    back_off = 1
-    back_off_factor = 1.25
 
     def __init__(self, hass, username, password):
         self.hass = hass
@@ -130,7 +128,7 @@ class MyEnergiManager:
             await self.async_update_items()
 
             async_track_point_in_utc_time(
-                self.hass, async_update, utcnow() + (self.SCAN_INTERVAL * (self.back_off ** self.back_off_factor))
+                self.hass, async_update, utcnow() + self.SCAN_INTERVAL
             )
 
         await async_update(None)
