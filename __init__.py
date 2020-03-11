@@ -75,13 +75,8 @@ class MyEnergiManager:
                 zappis = await self.hub.async_fetch_zappis()
         except (asyncio.TimeoutError, RequestException) as e:
             _LOGGER.error('Error while fetching Zappis: %s', e)
-            self.back_off += 1
-            _LOGGER.info('Backing off; will retry in %s seconds', round((
-                self.SCAN_INTERVAL * (self.back_off ** self.back_off_factor)
-            ).total_seconds(), 2))
             return
 
-        self.back_off = 0
         from .binary_sensor import ZappiPresenceSensor
         from .sensor import ZappiStatusSensor, ZappiPowerSensor, ZappiGridSensor
 
