@@ -58,7 +58,8 @@ class Hub:
         return resp.json()
 
     async def async_fetch_zappis(self):
-        for zappi_data in self.request('jstatus', {'id': 'Z'}).get('zappi', []):
+        data = await self.request('jstatus', {'id': 'Z'})
+        for zappi_data in data.get('zappi', []):
             z = Zappi.from_json(zappi_data, self)
             if z.serial in self._zappis:
                 continue
@@ -67,12 +68,14 @@ class Hub:
         return list(self._zappis.values())
 
     async def async_fetch_harvis(self):
-        for harvi_data in self.request('jstatus', {'id': 'H'}).get('harvi', []):
+        data = await self.request('jstatus', {'id': 'H'})
+        for harvi_data in data.get('harvi', []):
             return harvi_data
         return
 
     async def async_fetch_eddis(self):
-        for eddi_data in self.request('jstatus', {'id': 'E'}).get('eddi', []):
+        data = await self.request('jstatus', {'id': 'E'})
+        for eddi_data in data.get('eddi', []):
             pass
         return []
 
