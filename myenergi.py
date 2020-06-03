@@ -51,9 +51,9 @@ class Hub:
         self._zappis = {}
 
     def request(self, m, params, order=None, sep=None):
-        # ugh. I want to use aiohttp, but the digest authentication makes this
-        # painful
-        resp = self.session.get(get_uri(m, params, order, sep))
+        # Perform get in its own thread to avoid blocking event loop
+        loop = asyncio.get_event_loop()
+        resp = await loop.run_in_executor(None, self.session.get, get_uri(m, params, order, sep))
         resp.raise_for_status()
         return resp.json()
 
