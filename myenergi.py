@@ -50,7 +50,7 @@ class Hub:
             "Content-Type": "application/json"})
         self._zappis = {}
 
-    def request(self, m, params, order=None, sep=None):
+    async def request(self, m, params, order=None, sep=None):
         # Perform get in its own thread to avoid blocking event loop
         loop = asyncio.get_event_loop()
         resp = await loop.run_in_executor(None, self.session.get, get_uri(m, params, order, sep))
